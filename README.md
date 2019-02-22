@@ -34,3 +34,7 @@ Blurs image using average filter. Uses square homogeneous filter as default.
 Specify parameter sfilter if preferred.
 #### unsharpen
 #### laplace_sharpen
+
+## Functions
+### validate_io_types (dipts.validation.validate_io_types)
+Decorator function validating the input and output types if all are spesified in type discription. A little buggy still.
