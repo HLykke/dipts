@@ -1,5 +1,6 @@
 import inspect
 
+__all__ = ['validate_io_types']
 
 def validate_io_types(f):
     """Decorator function that validates input and return types
@@ -70,9 +71,9 @@ def test_validate_io_types():
         assert value, key
 
 
-def do_tests():
+def test():
     test_validate_io_types()
 
 
 if __name__ == '__main__':
-    do_tests()
+    test()

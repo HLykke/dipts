@@ -1,8 +1,11 @@
-from typing import List, Tuple
+__all__ = ['TimeSeries'
+        ,'DipImage']
 
+from typing import List, Tuple
 import imageio
 import matplotlib.pyplot as plt
 import numpy as np
+import sys
 from scipy.signal import convolve2d
 
 plt.rcParams['figure.dpi'] = 350
@@ -30,13 +33,13 @@ class TimeSeries(np.ndarray):
         return res
 
     def acf(self, max_shift: int = None):
-        """
-        Auto correlation function.
-        :param max_shift: (int). Cannot be larger than len(x).
-        :return: (np.ndarray of shape (1, n))
-        """
-        _acvf = self.acvf(max_shift)
-        return TimeSeries(_acvf / _acvf[0])
+    """
+    Auto correlation function.
+    :param max_shift: (int). Cannot be larger than len(x).
+    :return: (np.ndarray of shape (1, n))
+    """
+    _acvf = self.acvf(max_shift)
+    return TimeSeries(_acvf / _acvf[0])
 
     def plot(self, x=None, xlim: List[int] = None, ylim: List[int] = None, clear=True, *args, **kwargs):
         """Basic plot just to be able to see whats going on. """
