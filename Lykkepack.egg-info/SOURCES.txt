@@ -1,0 +1,5 @@
+setup.py
+Lykkepack.egg-info/PKG-INFO
+Lykkepack.egg-info/SOURCES.txt
+Lykkepack.egg-info/dependency_links.txt
+Lykkepack.egg-info/top_level.txt
