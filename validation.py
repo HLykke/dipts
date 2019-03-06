@@ -51,21 +51,21 @@ def test_validate_io_types():
     success = {}
     try:
         f1(1, (2, 3, 4))
-        success.append({'Everything fine': True})
+        success.update({'Everything fine': True})
     except Exception:
-        success.append({'Everything fine': False})
+        success.update({'Everything fine': False})
 
     try:
         f1(3.3, (1, 2, 3))
-        success.append({'Reaction when float is given, while int was expected': False})
+        success.update({'Reaction when float is given, while int was expected': False})
     except Exception:
-        success.append({'Reaction when float is given, while int was expected': True})
+        success.update({'Reaction when float is given, while int was expected': True})
 
     try:
         f1(3, 3)
-        success.append({'Reaction when int is given, while tuple was expected': False})
+        success.update({'Reaction when int is given, while tuple was expected': False})
     except Exception:
-        success.append({'Reaction when int is given, while tuple was expected': True})
+        success.update({'Reaction when int is given, while tuple was expected': True})
 
     for key, value in success.items():
         assert value, key
