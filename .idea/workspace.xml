@@ -2,9 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1b492b1b-5873-4474-8b5a-595fafbe1c6c" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes.py" beforeDir="false" afterPath="$PROJECT_DIR$/classes.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/validation.py" beforeDir="false" afterPath="$PROJECT_DIR$/validation.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.pytest_cache/v/cache/nodeids" beforeDir="false" afterPath="$PROJECT_DIR$/../.pytest_cache/v/cache/nodeids" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/../__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../classes.py" beforeDir="false" afterPath="$PROJECT_DIR$/../classes.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../validation.py" beforeDir="false" afterPath="$PROJECT_DIR$/../validation.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -14,13 +16,35 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="750">
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/classes.py">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../classes.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="966">
-              <caret line="92" column="19" selection-start-line="92" selection-start-column="19" selection-end-line="92" selection-end-column="19" />
+            <state relative-caret-position="353">
+              <caret line="481" column="74" lean-forward="true" selection-start-line="481" selection-start-column="74" selection-end-line="481" selection-end-column="74" />
               <folding>
-                <element signature="e#2653#2691#0" expanded="true" />
+                <element signature="e#43#53#0" expanded="true" />
+                <element signature="e#450#6490#0" />
+                <element signature="e#16922#18698#0" expanded="true" />
+                <element signature="e#16844#17498#1" />
+                <element signature="e#21997#22595#0" expanded="true" />
+                <element signature="e#21997#22245#1" />
+                <element signature="e#22830#23202#0" expanded="true" />
+                <element signature="e#25219#25660#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/../validation.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="672">
+              <caret line="25" column="41" selection-start-line="25" selection-start-column="41" selection-end-line="25" selection-end-column="41" />
+              <folding>
+                <element signature="e#0#14#0" expanded="true" />
+                <element signature="e#1082#1325#0" />
+                <element signature="e#1929#2738#0" expanded="true" />
+                <element signature="e#1932#1940#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -28,24 +52,33 @@
       </file>
     </leaf>
   </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>union</find>
+      <find>$\pi</find>
+      <find>\p</find>
+    </findStrings>
+  </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/../../dipts/classes.py" />
         <option value="$USER_HOME$/Documents/UiT/UiT_Courses/STA-2003/Øving7/øving7.py" />
-        <option value="$PROJECT_DIR$/../../classes.py" />
         <option value="$PROJECT_DIR$/classes.py" />
+        <option value="$PROJECT_DIR$/../__init__.py" />
+        <option value="$PROJECT_DIR$/../../classes.py" />
+        <option value="$PROJECT_DIR$/../classes.py" />
+        <option value="$PROJECT_DIR$/../validation.py" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="134" />
-    <option name="y" value="39" />
-    <option name="width" value="2040" />
-    <option name="height" value="2121" />
+  <component name="ProjectFrameBounds" extendedState="7">
+    <option name="x" value="1987" />
+    <option name="y" value="35" />
+    <option name="width" value="1853" />
+    <option name="height" value="2125" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -54,7 +87,17 @@
     </navigator>
     <panes>
       <pane id="Scope" />
-      <pane id="ProjectPane" />
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="." type="b2602c69:ProjectViewProjectNode" />
+              <item name="dipts" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -73,62 +116,17 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.classes (2)">
-    <configuration name="Python Console" type="PythonConfigurationType" factoryName="Python" temporary="true">
+  <component name="RunManager" selected="Python.classes">
+    <configuration name="classes" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="dipts" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="/Python Console" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="classes (1)" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <module name="dipts" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/../../dipts" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/../" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/../../dipts/classes.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="classes (2)" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <module name="dipts" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/../.." />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/../../classes.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/classes.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -145,11 +143,11 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/.." />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/classes.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/../classes.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -158,7 +156,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="øving7" type="PythonConfigurationType" factoryName="Python" temporary="true">
+    <configuration name="validation" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="dipts" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -166,11 +164,11 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$USER_HOME$/Documents/UiT/UiT_Courses/STA-2003/Øving7" />
-      <option name="IS_MODULE_SDK" value="false" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/.." />
+      <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$USER_HOME$/Documents/UiT/UiT_Courses/STA-2003/Øving7/øving7.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/../validation.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -179,13 +177,65 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="pytest for validation.test" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+      <module name="dipts" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/.." />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;validation.test&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration name="pytest for validation.test_validate_io_types" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+      <module name="dipts" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/.." />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;validation.test_validate_io_types&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration name="pytest in validation.py" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+      <module name="dipts" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/.." />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;$PROJECT_DIR$/../validation.py&quot;" />
+      <option name="_new_targetType" value="&quot;PATH&quot;" />
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="Python.classes" />
+      <item itemvalue="Python tests.pytest for validation.test_validate_io_types" />
+      <item itemvalue="Python tests.pytest in validation.py" />
+      <item itemvalue="Python tests.pytest for validation.test" />
+      <item itemvalue="Python.validation" />
+    </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.classes (2)" />
         <item itemvalue="Python.classes" />
-        <item itemvalue="Python.øving7" />
-        <item itemvalue="Python.classes (1)" />
-        <item itemvalue="Python.Python Console" />
+        <item itemvalue="Python tests.pytest in validation.py" />
+        <item itemvalue="Python tests.pytest for validation.test_validate_io_types" />
+        <item itemvalue="Python.validation" />
+        <item itemvalue="Python tests.pytest for validation.test" />
       </list>
     </recent_temporary>
   </component>
@@ -203,27 +253,55 @@
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="pytest_in_classes_py - 2019.02.27 at 11h 30m 57s.xml">
-      <configuration name="pytest in classes.py" configurationId="tests" />
+    <history-entry file="pytest_in_validation_py - 2019.03.13 at 12h 48m 56s.xml">
+      <configuration name="pytest in validation.py" configurationId="tests" />
+    </history-entry>
+    <history-entry file="pytest_in_validation_py - 2019.03.13 at 12h 49m 04s.xml">
+      <configuration name="pytest in validation.py" configurationId="tests" />
+    </history-entry>
+    <history-entry file="pytest_in_validation_py - 2019.03.13 at 12h 49m 55s.xml">
+      <configuration name="pytest in validation.py" configurationId="tests" />
+    </history-entry>
+    <history-entry file="pytest_in_validation_py - 2019.03.13 at 12h 50m 19s.xml">
+      <configuration name="pytest in validation.py" configurationId="tests" />
+    </history-entry>
+    <history-entry file="pytest_for_validation_test_validate_io_types - 2019.03.13 at 12h 50m 33s.xml">
+      <configuration name="pytest for validation.test_validate_io_types" configurationId="tests" />
+    </history-entry>
+    <history-entry file="pytest_in_validation_py - 2019.03.13 at 12h 51m 30s.xml">
+      <configuration name="pytest in validation.py" configurationId="tests" />
+    </history-entry>
+    <history-entry file="pytest_in_validation_py - 2019.03.13 at 12h 51m 54s.xml">
+      <configuration name="pytest in validation.py" configurationId="tests" />
+    </history-entry>
+    <history-entry file="pytest_in_validation_py - 2019.03.13 at 12h 52m 22s.xml">
+      <configuration name="pytest in validation.py" configurationId="tests" />
+    </history-entry>
+    <history-entry file="pytest_in_validation_py - 2019.03.13 at 12h 53m 02s.xml">
+      <configuration name="pytest in validation.py" configurationId="tests" />
+    </history-entry>
+    <history-entry file="pytest_in_validation_py - 2019.03.13 at 12h 53m 38s.xml">
+      <configuration name="pytest in validation.py" configurationId="tests" />
     </history-entry>
   </component>
   <component name="ToolWindowManager">
     <frame x="134" y="35" width="3706" height="2125" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.19605155" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.19605155" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.32998884" />
+      <window_info active="true" anchor="bottom" x="134" y="113" width="3706" height="2047" id="Run" order="2" type="WINDOWED" visible="true" weight="0.38795987" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.39966556" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Version Control" order="7" />
-      <window_info anchor="bottom" id="Terminal" order="8" weight="0.32998884" />
+      <window_info anchor="bottom" id="Terminal" order="8" visible="true" weight="0.32943144" />
       <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
-      <window_info anchor="bottom" id="Python Console" order="10" weight="0.32998884" />
+      <window_info anchor="bottom" id="Python Console" order="10" weight="0.30880713" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -235,7 +313,6 @@
     <entry file="file://$PROJECT_DIR$/../../matplotlib/__init__.py" />
     <entry file="file://$PROJECT_DIR$/../../matplotlib/pyplot.py" />
     <entry file="file://$PROJECT_DIR$/../../matplotlib/figure.py" />
-    <entry file="file://$PROJECT_DIR$/../../dipts/classes.py" />
     <entry file="file://$PROJECT_DIR$/../matplotlib/image.py" />
     <entry file="file://$USER_HOME$/Documents/UiT/UiT_Courses/STA-2003/Øving7/øving7.py">
       <provider selected="true" editor-type-id="text-editor">
@@ -249,13 +326,107 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../../classes.py" />
-    <entry file="file://$PROJECT_DIR$/classes.py">
+    <entry file="file://$PROJECT_DIR$/../../../scipy/stats/_multivariate.py" />
+    <entry file="file://$PROJECT_DIR$/../numpy/linalg/linalg.py" />
+    <entry file="file://$PROJECT_DIR$/../README.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor />
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///usr/lib/python3.6/re.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="966">
-          <caret line="92" column="19" selection-start-line="92" selection-start-column="19" selection-end-line="92" selection-end-column="19" />
+        <state relative-caret-position="377">
+          <caret line="141" selection-start-line="141" selection-end-line="141" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../scipy/ndimage/filters.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="377">
+          <caret line="210" column="4" selection-start-line="210" selection-start-column="4" selection-end-line="210" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../imageio/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="377">
+          <caret line="21" selection-start-line="21" selection-end-line="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="168">
+          <caret line="4" column="23" selection-start-line="4" selection-start-column="23" selection-end-line="4" selection-end-column="23" />
           <folding>
-            <element signature="e#2653#2691#0" expanded="true" />
+            <element signature="e#0#40#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../imageio/core/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="378">
+          <caret line="9" selection-start-line="9" selection-end-line="9" />
+          <folding>
+            <element signature="e#213#282#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///usr/lib/python3.6/typing.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
+          <caret line="5" selection-start-line="5" selection-end-line="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../scipy/ndimage/interpolation.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1357">
+          <caret line="634" column="54" selection-start-line="634" selection-start-column="54" selection-end-line="634" selection-end-column="54" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../classes.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="168">
+          <caret line="4" column="37" selection-start-line="4" selection-start-column="37" selection-end-line="4" selection-end-column="37" />
+          <folding>
+            <element signature="e#2947#4232#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../classes.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="353">
+          <caret line="481" column="74" lean-forward="true" selection-start-line="481" selection-start-column="74" selection-end-line="481" selection-end-column="74" />
+          <folding>
+            <element signature="e#43#53#0" expanded="true" />
+            <element signature="e#450#6490#0" />
+            <element signature="e#16922#18698#0" expanded="true" />
+            <element signature="e#16844#17498#1" />
+            <element signature="e#21997#22595#0" expanded="true" />
+            <element signature="e#21997#22245#1" />
+            <element signature="e#22830#23202#0" expanded="true" />
+            <element signature="e#25219#25660#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../validation.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="672">
+          <caret line="25" column="41" selection-start-line="25" selection-start-column="41" selection-end-line="25" selection-end-column="41" />
+          <folding>
+            <element signature="e#0#14#0" expanded="true" />
+            <element signature="e#1082#1325#0" />
+            <element signature="e#1929#2738#0" expanded="true" />
+            <element signature="e#1932#1940#0" expanded="true" />
           </folding>
         </state>
       </provider>

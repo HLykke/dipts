@@ -1,3 +1,3 @@
 [
-  "classes.py::test_DipImage"
+  "validation.py::test_validate_io_types"
 ]

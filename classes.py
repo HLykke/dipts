@@ -2,17 +2,20 @@ __all__ = ['TimeSeries'
     , 'DipImage']
 
 import sys
-from typing import List, Tuple
-import pyfftw
+from typing import List, Tuple, Union
 
 import imageio
 import matplotlib.pyplot as plt
 import numpy as np
 from scipy.ndimage import gaussian_filter, gaussian_laplace, rotate
 from scipy.signal import convolve2d, medfilt2d
+from scipy import misc
+from validation import validate_io_types
 
 plt.rcParams['figure.dpi'] = 350
 plt.rcParams['image.cmap'] = 'gray'
+plt.rcParams['text.usetex'] = True
+plt.rcParams['text.latex.unicode'] = True
 
 
 class TimeSeries(np.ndarray):
@@ -46,10 +49,31 @@ class TimeSeries(np.ndarray):
         _acvf = self.acvf(max_shift)
         return TimeSeries(_acvf / _acvf[0])
 
+    def ccvf(self, other, max_shift: int = None):
+        """
+        Cross covariance function.
+        :param other: Timeseries.
+        :param max_shift: M
+        :return:
+        """
+        n = np.min(len(self), len(other))
+        xmean = np.nanmean(self)
+        ymean = np.nanmean(other)
+        if max_shift is None:
+            max_shift = int(n - 1)
+        res = TimeSeries(np.zeros(max_shift))
+        for i, h in enumerate(np.arange(max_shift)):
+            res[i] = (self[h:] - xmean) @ (other[:n - h] - ymean) / (n - h)
+        return res
+
+    def ccf(self, other, max_shift: int = None):
+        _ccvf = self.ccvf(other, max_shift=max_shift)
+        return _ccvf / np.max(_ccvf)
+
     def fft(self, pad=None, return_f=False, shift=True):
         f = np.fft.fftfreq(len(self), d=self.dt)
         if pad is not None:
-            hat = np.fft.fft(self, n=pad) #((pad+len(self))//2)*2)
+            hat = np.fft.fft(self, n=pad)  # ((pad+len(self))//2)*2)
         else:
             hat = np.fft.fft(self)
         if shift:
@@ -66,7 +90,9 @@ class TimeSeries(np.ndarray):
             return t, TimeSeries(x)
         return TimeSeries(x)
 
-    def plot(self, x=None, xlim: List[int] = None, ylim: List[int] = None, clear=True, *args, **kwargs):
+    def plot(self, x=None, xlim: List[int] = None, ylim: List[int] = None
+             , clear=True, domain='time'
+             , xticksteps=5, xtickrotation=0, *args, **kwargs):
         """Basic plot just to be able to see whats going on. """
         if 'matplotlib.pyplot' not in sys.modules:
             pass
@@ -76,7 +102,7 @@ class TimeSeries(np.ndarray):
             fig.clf()
 
         if x is not None:
-            plt.plot(self, x, *args, **kwargs)
+            plt.plot(x, self, *args, **kwargs)
         else:
             plt.plot(self, *args, **kwargs)
 
@@ -86,16 +112,89 @@ class TimeSeries(np.ndarray):
         if ylim is not None:
             plt.ylim(ylim)
 
+        steps = xticksteps
+        if domain == 'omega':
+            myxticks = []
+            for i in range(-steps // 2 + 1, steps // 2 + 1):
+                pi = r'\pi'
+                if abs(i) == 1:
+                    i = ''
+                myxticks.append(r"$\frac{%s %s}{%s}$" % (i, pi, steps // 2))
+            myxticks[steps // 2] = 0
+            myxticks[0] = r"$-\pi$"
+            myxticks[-1] = r"$\pi$"
+
+            plt.xticks(np.linspace(0, len(self), steps), myxticks, rotation=xtickrotation)
+
+        elif domain == 'normal':
+            print()
+            pass
+
+        elif domain == 'freq':
+            # print("self.dt = ", self.dt)
+            plt.xticks(np.linspace(0, len(self), steps)
+                       , np.linspace(-1 / (2 * self.dt), 1 / (2 * self.dt), len(self)), rotation=xtickrotation)
+
         plt.show()
         plt.close(fig)
 
-    def polyreg(self, dim=1):
-        # Todo: STA,
-        raise NotImplementedError
+    def stem(self):
+        plt.stem(self)
+        plt.show()
 
-    def linreg(self):
+    def polyreg(self, t=None, deg=1):
+        # Todo: STA,
+        if t is None:
+            t = np.arange(len(self))
+        p = np.polyfit(t, self, deg=deg)
+        y_hat = np.polyval(p, t)
+        return y_hat
+        # raise NotImplementedError
+
+    def linreg(self, t=None):
         # Todo: STA, use polyreg(1)
-        raise NotImplementedError
+        y_hat = self.polyreg(t)
+        return y_hat
+
+    def periodogram(self, dt=1, w=None):
+        """Estimate of Power spectral density of x.
+        Optional to add window w."""
+        N = len(self)
+        if w is None:
+            w = 1
+            U = 1
+        elif w == 'hann':
+            w = np.hann(len(self))
+        elif w == 'hamming':
+            w = np.hamming(len(self))
+        else:
+            U = 1 / N * np.sum(w ** 2)
+
+        S = dt / (N * U) * np.abs(np.fft.fft(w * self)) ** 2
+        S = np.fft.fftshift(S)
+        return TimeSeries(S)
+
+    def wosa(self, m: int, overlap=0.5):
+        """Weighted overlapped segment averaging of x.
+        Which is an estimator of Power spectral density of x.
+
+        :param x: Time series
+        :param m: Segment length
+        :param overlap: (float in interval [0, 1]) Segment overlap.
+        :return: (np.ndarray). S_estimate_wosa.
+        """
+        # todo: zeropad instead of cutting away the end.
+        N = len(self)
+        print(N)
+        # soln. to n((1-overlap)m)+overlap*m < N wrt n where n is int.
+        n_seg = int((N - (m * overlap)) / (m * (1 - overlap)))  # Number of segments
+        segments = np.zeros((m, n_seg))
+        window = np.hamming(m)
+        for i in range(n_seg):
+            start = int((1 - overlap) * m * i)
+            segments[:, i] = S_per(self[start: start + m], w=window)
+        result = np.sum(segments, axis=1)
+        return result
 
     def Wb(self, length=None, dt=None):
         if length is None:
@@ -104,7 +203,7 @@ class TimeSeries(np.ndarray):
             dt = self.dt
         f = np.fft.fftfreq(length, d=self.dt)
         N = len(self)
-        res = self.dt**2/N * np.sin(N*np.pi*f*self.dt)**2/np.sin(np.pi*f*self.dt)**2
+        res = self.dt ** 2 / N * np.sin(N * np.pi * f * self.dt) ** 2 / np.sin(np.pi * f * self.dt) ** 2
         return res
 
     def __array_finalize__(self, obj):
@@ -121,6 +220,37 @@ class DipImage(np.ndarray):
         # obj.info = info
         return obj
 
+    def resize(self, new_shape, mode='nearest'):
+        """Resize an image using different methods.
+        The options are: 'nearest'
+                    (Todo: 'linear' or 'cubic')
+
+        Nearest neighbor works a little weird because of the way numpy.round and numpy.rint works.
+        If a number is in the middle between two integers it will be rounded to the
+        nearest even number, not away from 0 (which is the normal mathematical rule).
+        There are good motivations for this, but it works strange in this case.
+        """
+        # Tuples are immutable, but I need to do calculations with them.
+        old_shape = np.array(self.shape)
+        new_shape = np.array(new_shape)
+
+        image = np.ones(new_shape)*-1
+        scaling = new_shape / old_shape
+
+        image = np.zeros(new_shape)
+        i_x, i_y = np.mgrid[0:new_shape[0], 0:new_shape[1]]
+
+        # This is where things get strange because of round-to-nearest-even rule of numpy.
+        i_x = np.round(i_x* 1/scaling[0])
+        i_y = np.round(i_y* 1/scaling[1])
+        i_x = (i_x).astype(int)
+        i_y = (i_y).astype(int)
+        # To make sure no inices are above the highest possible one.
+        i_x[i_x >= old_shape[0]] = old_shape[0] - 1
+        i_y[i_y >= old_shape[1]] = old_shape[1] - 1
+        image = self[i_x, i_y]
+        return image
+
     def im2double(self):
         """
         Normalizes all elements in im (np.ndarray) to range [0, 1] and converts to float64.
@@ -128,6 +258,7 @@ class DipImage(np.ndarray):
         if np.any(self.imag):
             im = self.astype(np.complex)
         else:
+            im = self.real
             im = self.astype(np.float64)
         if max(np.unique(im)) > 1:
             return im / 255
@@ -181,14 +312,14 @@ class DipImage(np.ndarray):
             self[:] = im_T
         return im_T
 
-    def histogram_conversion(self, Ps= lambda x: x**2, L=256, show_hist: bool = False):  # Todo
+    def histogram_conversion(self, Ps=lambda x: x ** 2, L=256, show_hist: bool = False):  # Todo
         """Pz is the pdf to convert to."""
         ps_cum = np.cumsum(Ps(np.arange(L)))
         # print(ps_cum)
         raise NotImplementedError()
 
     def rotate(self, angle=90, inplace=False):
-        im = rotate(self, angle=angle)
+        im = rotate(self, angle=angle, reshape=False)
         if inplace:
             self[:] = im
         return DipImage(im)
@@ -281,14 +412,14 @@ class DipImage(np.ndarray):
             self[:] = a
         return a
 
-    def impad(self, pad=None, inplace=True):
+    def impad(self, pad=None):
         """Zero-padding of image. Pads zeros only after image in both directions.
         By default pads smallest number of zeros that is greater than 2*image,
         but is a 2-expential. Ex: An image of (3,14) --> (8, 32). """
         oldshape = np.array(self.shape)  # Make it list to be able to change the values
         if pad is None:
             # The smallest size larger than double the original size in both directions that is a 2-exponential.
-            newshape = np.int32(2**(np.ceil(np.log2(oldshape * 2)))) - self.shape
+            newshape = np.int32(2 ** (np.ceil(np.log2(oldshape * 2)))) - self.shape
             # print(newshape + self.shape)
             im = np.pad(self
                         , ((0, newshape[0]), (0, newshape[1]))
@@ -301,12 +432,17 @@ class DipImage(np.ndarray):
         # testimage = DipImage(im)
         # testimage.show()
         image = DipImage(im)
+
+        # Does not work because self is of different shape
         # if inplace:
         #     self[:] = image
         return image
 
-    def fft(self, inplace=False, log=False):
+    def fft(self, pad=None, inplace=False, log=False):
+        """Pads by default to smallest 2-exponentials larger than 2*im.shape."""
         im = self.im2double()
+        if pad is not False:
+            im = im.impad(pad)
         if self.ndim == 1:
             im_hat = np.fft.fft(im)
         elif self.ndim == 2:
@@ -345,13 +481,13 @@ class DipImage(np.ndarray):
         if mode == 'gaussian':
             # todo: Make bandpass here. Isolate mask so zone_plate can be shown.
             mask = np.ones_like(self)
-            mask = DipImage(gaussian_filter(mask.fft().real, sigma=10))
-            image = DipImage(mask.fft()*self.fft()).ifft()
+            mask = DipImage(gaussian_filter(mask.fft().real, sigma=sigma))
+            image = DipImage(mask.fft() * self.fft()).ifft()
             mask.show()
             return DipImage(image)
         return self.bandpass(band=(0, d), sfilter=sfilter, mode=mode, zone_plate=zone_plate)
 
-    def highpass(self, d, sfilter=None, mode='gaussian', zone_plate=False):
+    def highpass(self, d=None, sfilter=None, mode='gaussian', sigma=1, zone_plate=False, return_mask=False):
         # Todo: Gaussian, blackman?, zone_plate
         """Highpass-filter of self. Self must be in time-domain.
         d is distance from center in pixels. Isotropic filter.
@@ -363,56 +499,71 @@ class DipImage(np.ndarray):
         """
         if mode == 'gaussian':
             # todo: Make bandpass here. Isolate mask so zone_plate can be shown.
-            image = gaussian_filter(self, sigma=sigma)
-            return DipImage(image)
-        return self.bandpass(band=(d, np.inf), sfilter=sfilter, mode=mode, zone_plate=zone_plate)
+            mask = np.ones_like(self)
+            mask = DipImage(1 - gaussian_filter(mask.fft().real, sigma=sigma))
+            image = DipImage(mask.fft() * self.fft()).ifft()
+            mask.show()
+            if return_mask:
+                return DipImage(image), mask
+            else:
+                return DipImage(image)
+        return self.bandpass(band=(d, np.inf), sfilter=sfilter, mode=mode, zone_plate=zone_plate,
+                             return_mask=return_mask)
 
-    def bandpass(self, band: tuple, shape=None, sfilter = None
-                 , mode: str = 'gaussian', sigma=1, zone_plate=False, inplace=False):
+    def bandpass(self, band: Tuple[float, float] = (0, np.inf), pad: Tuple = None
+                 , sfilter=None, return_mask=False, mode: str = 'gaussian', zone_plate=False
+                 , inplace=False, **kwargs):
         """Band pass filter.
 
+        :param pad: Default is padding lowest 2-exponent larger than
+                douple the axis length in both x and y directions. Set False for no padding.
         :param band: Range of what frequencies to let pass thought.
         :param sfilter: If you wish, you may specify your own filter.
         :param mode: 'gaussian' or 'ideal'.
         :param zone_plate: Show what effect the filter has on a zone_plate.
+        :param sigma: (tuple). Sigma of highpass and sigma of lowpass. (....|-----|....).
+        :param inplace: If True, replaces the current image with the bandpassed image.
+        :param kwargs: Passed on to _crosscar (params rx and ry) or to _mnormal (params cov, mean)
         :return: the filtered version of self.
         """
-        # Todo: Gaussian, blackman?, zone_plate
-
+        # Todo: zone_plate
         # Signal to be modified
         dft = self.fft()
 
-        if shape is None:
-            shape = self.shape
-        if mode=='ideal':
-            lenx = shape[0]//2
-            leny = shape[1]//2
-            print(lenx, leny)
-            y, x = np.ogrid[-lenx: lenx, -leny: leny]
-            # print(y, x)
-            if band is None:
-                raise ValueError('When mode "gaussian" or "ideal" is chosen'
-                                 ', the radius-parameter, band, must be specified.')
-            # Making filter mask. 00000011111111000000000 in radius.
-            sfilter = (band[0] ** 2 <= x ** 2 + y ** 2) & (x ** 2 + y ** 2 <= band[1]**2)
+        if pad is None:
+            shape = dft.shape
 
-        image = DipImage(dft * sfilter).ifft()
+        # boxcar filter
+        if mode == 'ideal':
+            mask = self._boxcar(*band, shape=shape, **kwargs)
+
+        if mode == 'crosscar':
+            mask = self._crosscar(shape=shape, **kwargs)
 
         if mode == 'gaussian':
-            # todo: Make bandpass here. Isolate mask so zone_plate can be shown.
-            mask = np.ones_like(self)
-            mask = ~gaussian_filter(mask, sigma=sigma)
-            print(mask)
-            # raise NotImplementedError
+            # mask = self._mnormal(shape, **kwargs)
+            mask = self._normal(shape=shape, **kwargs)
+
+        if mode == 'butterworth':
+            mask = self._butterworth(*band, shape=shape, **kwargs)
 
         if zone_plate:
             sfilter = DipImage(sfilter)
             print(sfilter.shape)
             sfilter.show()
             sfilter.zoneplate()
+
+        image = DipImage(dft * mask).ifft()
+        m, n = self.shape
+        image = image[:m, :n]
+
         if inplace:
-            self[:] = np.abs(image)
-        return image
+            self[:] = image.real
+
+        if return_mask:
+            return image.real, mask
+        else:
+            return image.real
 
     def zoneplate(self, shape=None):
         """See how a filter behaves. Let self be the filter of interest.
@@ -423,8 +574,10 @@ class DipImage(np.ndarray):
             f.zoneplate(shape=(256, 256))
 
         """
+
         def z(x, y):
-            return 1/2*(1 + np.cos(x**2 + y**2))
+            return 1 / 2 * (1 + np.cos(x ** 2 + y ** 2))
+
         if shape is None:
             m, n = self.shape
         else:
@@ -442,15 +595,124 @@ class DipImage(np.ndarray):
         ax[1].imshow(np.abs(plate))
         plt.show()
 
-    def show(self):
+    def show(self, toscreen: bool=True, save: str=None):
         if np.count_nonzero(self.imag):
             fig, ax = plt.subplots(1, 2)
             ax[0].imshow(self.real)
             ax[1].imshow(self.imag)
-            plt.show()
         else:
-            plt.imshow(self.real, cmap='gray')
+            fig, ax = plt.subplots(1, 1)
+            ax.imshow(self.real, cmap='gray')
+        if toscreen:
             plt.show()
+        if save is not None:
+            plt.savefig(save)
+        plt.close(fig)
+
+    def _mnormal(self, cov=np.diag([1, 1]), mean=None, shape=None):
+        # Todo: finish
+        raise NotImplementedError("{} is not working yet.".format(self._mnormal.__name__))
+        # Shape fixing
+        cov = np.array(cov)
+        dft = self.fft()
+        nx, ny = np.array(dft.shape) // 2
+        if shape is None:
+            shape = self.shape
+        # Setting middle of image to default mean value.
+        if mean is None:
+            mean = np.array([nx, ny])
+            # print(mean)
+
+        # if given a single number for cov
+        # print("Before: ", cov)
+        if cov.ndim < 2:
+            cov = np.diag(cov)
+            # print("After: ", cov)
+
+        mask = np.mgrid[-nx:nx, -ny:ny]
+        mask = DipImage(self.d_multivariate_normal(mask, mean, cov))
+        # mask.show()
+
+    def _normal(self, sigma: Tuple[float, float] = (0, np.inf), shape=None):
+        """Gaussian bandpass filter in 2d.
+        If shape is not specified shape of self will be used.
+        :param sigma: Lower cutoff-frequency is approx. 2*sigma[0]
+                and higher cutoff-frequency is approx. 2*sigma[1].
+        :param shape: Shape of returned bandpass filter."""
+        if shape is None:
+            shape = self.shape
+        nx = shape[0] // 2
+        ny = shape[1] // 2
+        y, x = np.ogrid[-nx: nx, -ny: ny]
+        distance2 = x ** 2 + y ** 2
+        # Assuming covariance matrix is diagonal and sigma_x = sigma_y.
+        highpass = - np.exp(- distance2 / (2 * sigma[0] ** 2)) / (np.sqrt(2 * np.pi) * sigma[1])
+        lowpass = np.exp(- distance2 / (2 * sigma[1] ** 2)) / (np.sqrt(2 * np.pi) * sigma[1])
+        mask = lowpass + highpass
+        return DipImage(mask)
+
+    def _boxcar(self, rmin=0, rmax=np.inf, shape=None):
+        """Ideal bandpass filter in 2d. If shape is not specified shape of self will be used.
+        :param rmin: Lower cutoff-frequency
+        :param rmax: Higher cutoff-frequency
+        :param shape: Shape of returned bandpass filter."""
+        if shape is None:
+            shape = self.shape
+        nx = shape[0] // 2
+        ny = shape[1] // 2
+        # print(lenx, leny)
+        y, x = np.ogrid[-nx: nx, -ny: ny]
+        # print(y, x)
+        # Making filter mask. 00000011111111000000000 in radius.
+        mask = (rmin ** 2 <= x ** 2 + y ** 2) & (x ** 2 + y ** 2 <= rmax ** 2)
+        return TimeSeries(mask)
+
+    def _butterworth(self, rmin=0, rmax=np.inf, n=3, shape=None):
+        """Butterworth bandpass filter in 2d.
+        If shape is not specified shape of self will be used.
+        :param rmin: Lower cutoff-frequency
+        :param rmax: Higher cutoff-frequency
+        :param shape: Shape of returned bandpass filter."""
+        if shape is None:
+            shape = self.shape
+        nx = shape[0] // 2
+        ny = shape[1] // 2
+        y, x = np.ogrid[-nx: nx, -ny: ny]
+        distance2 = x ** 2 + y ** 2
+        d02 = rmin ** 2
+        d12 = rmax ** 2
+        highpass = - 1 / (1 + (distance2 / d02) ** n)
+        lowpass = 1 / (1 + (distance2 / d12) ** n)
+        mask = highpass + lowpass
+        return DipImage(mask)
+
+    def _crosscar(self, rx, ry, shape=None, center=None, rot=0):
+        """Pass filter in 2d of a cross. """
+        if shape is None:
+            shape = self.shape
+        # Placing center of cross
+        if center is None:
+            center = np.array(shape) // 2
+
+        mask = np.zeros(shape)
+
+        mask[center[0] - rx: center[0] + rx, :] = 1
+        mask[:, center[1] - ry: center[1] + ry] = 1
+        return DipImage(mask).rotate(rot)
+
+    @staticmethod
+    def d_multivariate_normal(X, mu, cov):
+        print("Shapes:")
+        print("\tmu: ", mu.shape)
+        print("\tcov: ", cov.shape)
+        print("\tX: ", X.shape, '\n')
+        print("mu = ", mu)
+        print("cov = ", cov)
+        print("X = ", X)
+
+        a = 1 / (np.sqrt(2 * np.pi) ** len(mu) * np.linalg.det(cov))
+        exponent = -1 / 2 * (X - mu).T @ np.linalg.inv(cov) @ (X - mu)
+        return a * np.exp(exponent)
 
     def __array_finalize__(self, obj):
         if obj is None:
@@ -466,7 +728,7 @@ def example():
     im = DipImage(im)
     # gamma transform
     for j, i in enumerate([1, 0.6, 0.4, 0.2]):
-        plt.subplot(2, 2, j+1)
+        plt.subplot(2, 2, j + 1)
         plt.imshow(im.gamma_transform(i).im2double(), vmax=1, vmin=0)
     plt.show()
 
@@ -508,31 +770,47 @@ def t_DipImage():
         '/home/harald/Documents/UiT/UiT_Courses/FYS-2010/data/ch4/Fig0441(a)(characters_test_pattern).tif')
     im = DipImage(im)
     im.show()
+
+    image = im.bandpass(band=(50, 160), n=3, mode='butterworth')
+    image.show()
+    # im.show()
+
+    # im2 = im.bandpass(band=(0, 100), mode='ideal')
+    # im2.show()
+
     # im.show()
     # im = im.impad().fft(log=True)
     # im.show()
 
     # bandpassed = im.bandpass(band=(50, 150), mode='ideal')
     # bandpassed.show()
-    im.lowpass(sigma=3)
 
 
 def t_TimeSeries():
-    # Perfect one
-    f = 5
-    x = TimeSeries(np.sin(2*np.pi*f*np.linspace(0, 1, 2**12)))
-    y = TimeSeries(np.sin(2*np.pi*f*np.linspace(0, 1, 10)))
-    t = np.arange(2**12)
-    # wb = y.fft(shift=False).Wb(length=2**14)
-    # plt.plot(t, x.fft(shift=True)/2**14)
-    plt.plot(t, y.fft(pad=2**12))
-    # plt.plot(wb)
-    # a = x.fft().Wb(length=2000)
-    # plt.plot(a)
+    # # Perfect one
+    # f = 5
+    # x = TimeSeries(np.sin(2 * np.pi * f * np.linspace(0, 1, 2 ** 12)))
+    # y = TimeSeries(np.sin(2 * np.pi * f * np.linspace(0, 1, 10)))
+    # t = np.arange(2 ** 12)
+    # # wb = y.fft(shift=False).Wb(length=2**14)
+    # # plt.plot(t, x.fft(shift=True)/2**14)
+    # plt.plot(t, y.fft(pad=2 ** 12))
+    # # plt.plot(wb)
+    # # a = x.fft().Wb(length=2000)
+    # # plt.plot(a)
+    # plt.show()
+
+    # regression
+    N = 10
+    y = TimeSeries(0.09 * np.arange(N) ** (1 / 3) + np.random.randn(N))
+    y_hat = y.polyreg(2)
+    plt.plot(y)
+    plt.plot(y_hat)
     plt.show()
 
 
 if __name__ == '__main__':
     # example()
-    t_DipImage()
+    # t_DipImage()
     # t_TimeSeries()
+    pass
